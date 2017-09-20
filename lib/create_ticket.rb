@@ -48,7 +48,8 @@ module CreateTicket
       req.url '/rest/api/2/issue'
       req.body = jira_ticket_json
     end
-    JSON.parse(response.body).fetch('key')
+    key = JSON.parse(response.body).fetch('key')
+    puts "#{jira_url}/browse/#{key}"
   end
 
   def jira_ticket_json
