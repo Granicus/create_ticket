@@ -1,8 +1,6 @@
 # CreateTicket
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/create_ticket`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Create JIRA tickets from ERB Markdown files. For an example, see `test/fixtures/example.md.erb`.
 
 ## Installation
 
@@ -22,7 +20,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    export JIRA_TOKEN="your JIRA token"
+    export TEMPLATE_FILENAME=a-template.md.erb
+    export JIRA_URL=https://jira.yourwebsite.com
+    export JIRA_PROJECT=YOURPROJECT
+    export JIRA_ASSIGNEE=`whoami`
+    export JIRA_ISSUE_TYPE=Story
+
+    create_ticket
 
 ## Development
 
@@ -32,7 +37,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/create_ticket. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/govdelivery/create_ticket. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
