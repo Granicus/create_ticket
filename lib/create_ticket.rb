@@ -65,9 +65,17 @@ module CreateTicket
     }.to_json
   end
 
+  def content
+    ERB.new(template).result(binding)
+  rescue KeyError => e
+    puts "Please set all required ENV variables for your template: #{ENV['TEMPLATE_FILENAME']}"
+    puts e.message
+    exit 1
+  end
+
   def summary
     # TODO: Assumes Markdown with an h1 at the top.
-    template.lines.first[2..-1].strip
+    content.lines.first[2..-1].strip
   end
 
   def kramdown_options
@@ -82,11 +90,9 @@ module CreateTicket
   end
 
   def description
-    markdown = ERB.new(template).result(binding)
-
     # TODO: Assumes Markdown with an h1 at the top.
-    markdown.sub!(/# .*\n/, '')
-
+    markdown = content.sub(/# .*\n/, '')
+    
     Kramdown::Document.new(markdown, kramdown_options).to_confluence
   end
 end
