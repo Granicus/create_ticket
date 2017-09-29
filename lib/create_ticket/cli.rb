@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'create_ticket'
+
 class CreateTicket
-  class Cli
+  class CLI
     def conf
       {
         jira_url: ENV.fetch('JIRA_URL'),

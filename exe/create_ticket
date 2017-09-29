@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'create_ticket'
+require 'create_ticket/cli'
 
 CreateTicket::CLI.new.run!
