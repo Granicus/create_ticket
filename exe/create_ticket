@@ -3,4 +3,4 @@
 
 require 'create_ticket'
 
-CreateTicket.create_ticket
+CreateTicket::CLI.new.run!

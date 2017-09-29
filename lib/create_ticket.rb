@@ -1,34 +1,21 @@
+# frozen_string_literal: true
+
 require 'create_ticket/version'
 require 'markdown2confluence'
 require 'faraday'
 require 'json'
 require 'erb'
 
-module CreateTicket
-  extend self
+class CreateTicket
+  attr_reader *%i[jira_url project jira_token template_filename assignee issue_type]
 
-  def jira_url
-    ENV.fetch('JIRA_URL')
-  end
-
-  def project
-    ENV.fetch('JIRA_PROJECT')
-  end
-
-  def jira_token
-    ENV.fetch('JIRA_TOKEN')
-  end
-
-  def template_filename
-    ENV.fetch('TEMPLATE_FILENAME')
-  end
-
-  def assignee
-    ENV.fetch('JIRA_ASSIGNEE')
-  end
-
-  def issue_type
-    ENV.fetch('JIRA_ISSUE_TYPE')
+  def initialize(conf)
+    @jira_url = conf.fetch(:jira_url)
+    @project = conf.fetch(:project)
+    @jira_token = conf.fetch(:jira_token)
+    @template_filename = conf.fetch(:template_filename)
+    @assignee = conf.fetch(:assignee)
+    @issue_type = conf.fetch(:issue_type)
   end
 
   def template
@@ -92,7 +79,7 @@ module CreateTicket
   def description
     # TODO: Assumes Markdown with an h1 at the top.
     markdown = content.sub(/# .*\n/, '')
-    
+
     Kramdown::Document.new(markdown, kramdown_options).to_confluence
   end
 end

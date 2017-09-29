@@ -1,26 +1,41 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class CreateTicketTest < Minitest::Test
+  def test_conf
+    {
+      jira_url: 'jira_url',
+      project: 'project',
+      jira_token: 'jira_token',
+      template_filename: 'test/fixtures/example.md.erb',
+      assignee: 'assignee',
+      issue_type: 'issue_type'
+    }
+  end
+
+  def test_create_ticket
+    @test_create_ticket ||= CreateTicket.new(test_conf)
+  end
+
   def test_that_it_has_a_version_number
     refute_nil ::CreateTicket::VERSION
   end
 
-  def test_it_does_something_useful
-    old_jira_url = ENV['JIRA_URL']
-    ENV['JIRA_URL'] = 'testing'
-    assert_equal 'testing', CreateTicket.jira_url
-    ENV['JIRA_URL'] = old_jira_url
+  def test_it_uses_supplied_conf
+    assert_equal 'jira_url', test_create_ticket.jira_url
+    assert_equal 'project', test_create_ticket.project
+    assert_equal 'jira_token', test_create_ticket.jira_token
+    assert_equal 'assignee', test_create_ticket.assignee
+    assert_equal 'issue_type', test_create_ticket.issue_type
   end
 
   def test_it_loads_an_example_file
-    old_variable = ENV['VARIABLE']
     ENV['VARIABLE'] = 'lol'
-    old_template_filename = ENV['TEMPLATE_FILENAME']
-    ENV['TEMPLATE_FILENAME'] = 'test/fixtures/example.md.erb'
 
-    assert_equal 'HEY!', CreateTicket.summary
+    assert_equal 'HEY!', test_create_ticket.summary
 
     expected_description = File.open('test/fixtures/example.confluence').read
-    assert_equal expected_description, CreateTicket.description
+    assert_equal expected_description, test_create_ticket.description
   end
 end

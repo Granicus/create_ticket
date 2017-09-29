@@ -14,10 +14,7 @@ Metrics/LineLength:
 
 # Offense count: 1
 Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'lib/create_ticket.rb'
+  Enabled: false
 
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
