@@ -7,7 +7,7 @@ require 'json'
 require 'erb'
 
 class CreateTicket
-  attr_reader *%i[jira_url project jira_token template_filename assignee issue_type]
+  attr_reader :jira_url, :project, :jira_token, :template_filename, :assignee, :issue_type
 
   def initialize(conf)
     @jira_url = conf.fetch(:jira_url)
@@ -30,7 +30,7 @@ class CreateTicket
     end
   end
 
-  def create_ticket
+  def create_ticket!
     response = jira_request.post do |req|
       req.url '/rest/api/2/issue'
       req.body = jira_ticket_json
