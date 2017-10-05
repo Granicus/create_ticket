@@ -7,16 +7,18 @@ require 'json'
 require 'erb'
 
 class CreateTicket
-  attr_reader :jira_url, :project, :jira_token, :template_filename, :assignee, :issue_type
+  extend Forwardable
+
+  attr_reader :conf
 
   def initialize(conf)
-    @jira_url = conf.fetch(:jira_url)
-    @project = conf.fetch(:project)
-    @jira_token = conf.fetch(:jira_token)
-    @template_filename = conf.fetch(:template_filename)
-    @assignee = conf.fetch(:assignee)
-    @issue_type = conf.fetch(:issue_type)
+    conf = OpenStruct.new(conf) if conf.is_a? Hash
+    @conf = conf
   end
+
+  def_delegators :conf,
+                 :jira_url, :project, :jira_token, :template_filename,
+                 :assignee, :issue_type, :duedate, :custom_fields
 
   def template
     @template ||= File.open(template_filename).read
@@ -35,20 +37,32 @@ class CreateTicket
       req.url '/rest/api/2/issue'
       req.body = jira_ticket_json
     end
-    key = JSON.parse(response.body).fetch('key')
-    puts "#{jira_url}/browse/#{key}"
+    begin
+      key = JSON.parse(response.body).fetch('key')
+      puts "#{jira_url}/browse/#{key}"
+    rescue KeyError, JSON::ParserError
+      puts 'Could not create a JIRA ticket.'
+      puts 'Response from server:'
+      puts response.body
+      exit 1
+    end
+  end
+
+  def fields
+    {
+      project: { key: project },
+      issuetype: { name: issue_type },
+      summary: summary,
+      description: description,
+      assignee: { name: assignee },
+      reporter: { name: assignee },
+      duedate: duedate
+    }.merge(custom_fields)
   end
 
   def jira_ticket_json
     {
-      fields: {
-        project: { key: project },
-        issuetype: { name: issue_type },
-        summary: summary,
-        description: description,
-        assignee: { name: assignee },
-        reporter: { name: assignee }
-      }
+      fields: fields
     }.to_json
   end
 
