@@ -3,39 +3,51 @@
 require 'test_helper'
 
 class CreateTicketTest < Minitest::Test
-  def test_conf
+  def example_conf
     {
       jira_url: 'jira_url',
       project: 'project',
       jira_token: 'jira_token',
       template_filename: 'test/fixtures/example.md.erb',
       assignee: 'assignee',
-      issue_type: 'issue_type'
+      issue_type: 'issue_type',
+      duedate: nil,
+      custom_fields: {
+        'customfield_123': 'lol',
+        'customfield_456': 'zomg'
+      }
     }
   end
 
-  def test_create_ticket
-    @test_create_ticket ||= CreateTicket.new(test_conf)
+  def expected_fields
+    {
+      project: { key: 'project' },
+      issuetype: { name: 'issue_type' },
+      summary: 'HEY!',
+      description: expected_description,
+      assignee: { name: 'assignee' },
+      reporter: { name: 'assignee' },
+      duedate: nil,
+      customfield_123: 'lol',
+      customfield_456: 'zomg'
+    }
+  end
+
+  def expected_description
+    File.open('test/fixtures/example.confluence').read
+  end
+
+  def ticket_creator
+    @ticket_creator ||= CreateTicket.new(example_conf)
   end
 
   def test_that_it_has_a_version_number
     refute_nil ::CreateTicket::VERSION
   end
 
-  def test_it_uses_supplied_conf
-    assert_equal 'jira_url', test_create_ticket.jira_url
-    assert_equal 'project', test_create_ticket.project
-    assert_equal 'jira_token', test_create_ticket.jira_token
-    assert_equal 'assignee', test_create_ticket.assignee
-    assert_equal 'issue_type', test_create_ticket.issue_type
-  end
-
-  def test_it_loads_an_example_file
+  def test_it_configures_fields_correctly
     ENV['VARIABLE'] = 'lol'
 
-    assert_equal 'HEY!', test_create_ticket.summary
-
-    expected_description = File.open('test/fixtures/example.confluence').read
-    assert_equal expected_description, test_create_ticket.description
+    assert_equal expected_fields, ticket_creator.fields
   end
 end

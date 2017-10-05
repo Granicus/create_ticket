@@ -27,6 +27,8 @@ Or install it yourself as:
     export JIRA_ASSIGNEE=`whoami`
     export JIRA_ISSUE_TYPE=Story
 
+    export JIRA_CUSTOMFIELD_12345="If you have a required custom field, you can set them like this."
+
     create_ticket
 
 ## Development
