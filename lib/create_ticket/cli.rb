@@ -38,7 +38,11 @@ class CreateTicket
     end
 
     def run!
-      CreateTicket.new(self).create_ticket!
+      ticket_url = CreateTicket.new(self).create_ticket!
+      puts ticket_url
+    rescue KeyError, JSON::ParserError => e
+      puts e.message
+      exit 1
     end
   end
 end
