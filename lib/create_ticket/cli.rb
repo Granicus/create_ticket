@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'base64'
+require 'highline'
 require 'create_ticket'
 
 class CreateTicket
@@ -12,8 +14,15 @@ class CreateTicket
       ENV.fetch('JIRA_PROJECT')
     end
 
+    def prompt_for_jira_token
+      cli = HighLine.new
+      username = cli.ask('Username: ')
+      password = cli.ask('Password: ') { |q| q.echo = '*' }
+      Base64.encode64 "#{username}:#{password}"
+    end
+
     def jira_token
-      ENV.fetch('JIRA_TOKEN')
+      ENV.fetch('JIRA_TOKEN', prompt_for_jira_token)
     end
 
     def template_filename
