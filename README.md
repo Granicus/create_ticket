@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-    export JIRA_TOKEN="your JIRA token"
+    export JIRA_TOKEN="your JIRA token" # If this is unset, it will ask for your JIRA username and password
     export TEMPLATE_FILENAME=a-template.md.erb
     export JIRA_URL=https://jira.yourwebsite.com
     export JIRA_PROJECT=YOURPROJECT
