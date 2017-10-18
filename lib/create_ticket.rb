@@ -37,15 +37,9 @@ class CreateTicket
       req.url '/rest/api/2/issue'
       req.body = jira_ticket_json
     end
-    begin
-      key = JSON.parse(response.body).fetch('key')
-      puts "#{jira_url}/browse/#{key}"
-    rescue KeyError, JSON::ParserError
-      puts 'Could not create a JIRA ticket.'
-      puts 'Response from server:'
-      puts response.body
-      exit 1
-    end
+
+    key = JSON.parse(response.body).fetch('key')
+    "#{jira_url}/browse/#{key}"
   end
 
   def fields
@@ -68,10 +62,6 @@ class CreateTicket
 
   def content
     ERB.new(template).result(binding)
-  rescue KeyError => e
-    puts "Please set all required ENV variables for your template: #{ENV['TEMPLATE_FILENAME']}"
-    puts e.message
-    exit 1
   end
 
   def summary
