@@ -22,7 +22,7 @@ class CreateTicket
     end
 
     def jira_token
-      ENV.fetch('JIRA_TOKEN', prompt_for_jira_token)
+      ENV.fetch('JIRA_TOKEN') { prompt_for_jira_token }
     end
 
     def template_filename
