@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'create_ticket/version'
+require 'create_ticket/could_not_create_ticket_error'
 require 'markdown2confluence'
 require 'faraday'
 require 'json'
@@ -38,7 +39,12 @@ class CreateTicket
       req.body = jira_ticket_json
     end
 
-    key = JSON.parse(response.body).fetch('key')
+    begin
+      key = JSON.parse(response.body).fetch('key')
+    rescue KeyError
+      raise CouldNotCreateTicketError, "Response from JIRA was: #{response.body}"
+    end
+
     "#{jira_url}/browse/#{key}"
   end
 
