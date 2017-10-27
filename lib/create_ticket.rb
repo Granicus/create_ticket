@@ -49,15 +49,16 @@ class CreateTicket
   end
 
   def fields
-    {
+    effs = {
       project: { key: project },
       issuetype: { name: issue_type },
       summary: summary,
       description: description,
       assignee: { name: assignee },
-      reporter: { name: assignee },
-      duedate: duedate
+      reporter: { name: assignee }
     }.merge(custom_fields)
+    effs[:duedate] = duedate unless duedate.nil?
+    effs
   end
 
   def jira_ticket_json

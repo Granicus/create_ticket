@@ -27,7 +27,6 @@ class CreateTicketTest < Minitest::Test
       description: expected_description,
       assignee: { name: 'assignee' },
       reporter: { name: 'assignee' },
-      duedate: nil,
       customfield_123: 'lol',
       customfield_456: 'zomg'
     }
