@@ -1,8 +1,8 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.4.1
-before_install: gem install bundler -v 1.15.4
+  - 2.6.3
 
 script:
   - rubocop
+  - rake test
