@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'faraday'
   spec.add_dependency 'json'
+  spec.add_dependency 'kramdown-parser-gfm'
   spec.add_dependency 'markdown2confluence'
   spec.add_dependency 'highline'
 end
