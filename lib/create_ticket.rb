@@ -55,7 +55,7 @@ class CreateTicket
       summary: summary,
       description: description,
       assignee: { name: assignee },
-      reporter: { name: assignee }
+      reporter: { name: (assignee == '-1' ? 'Bill.Bushey@granicus.com' : assignee) }
     }.merge(custom_fields)
     effs[:duedate] = duedate unless duedate.nil?
     effs
